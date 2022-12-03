@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/best-movies-react/static/css/main.8206375c.css",
+    "main.js": "/best-movies-react/static/js/main.68a3c1df.js",
+    "index.html": "/best-movies-react/index.html",
+    "main.8206375c.css.map": "/best-movies-react/static/css/main.8206375c.css.map",
+    "main.68a3c1df.js.map": "/best-movies-react/static/js/main.68a3c1df.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.8206375c.css",
+    "static/js/main.68a3c1df.js"
+  ]
+}
