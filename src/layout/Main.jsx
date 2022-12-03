@@ -15,16 +15,24 @@ class Main extends React.Component {
 
 
   componentDidMount(){ //делаем запрос данных в методе жизненного цикла
-    fetch(`http://www.omdbapi.com/?apikey=${API_KEY}&s=Shrek`) //получаем данные из API, прилож. Postman
+    fetch(`https://www.omdbapi.com/?apikey=${API_KEY}&s=Shrek`) //получаем данные из API, прилож. Postman
     .then(response => response.json()) //преобразуем ответ в JSON-объект
     .then(result => this.setState({movies: result.Search, loading: false})) //обрабатываем ответ: внутрь массива movies "кладём" то, что находится в ключе Searct (см. в Postman)
+    .catch((err) => {
+      console.error(err);
+      this.setState({loading: false})
+    })
   }
 
   searchMovies = (str, type = 'all') => {
     this.setState({loading: true})
-    fetch(`http://www.omdbapi.com/?apikey=${API_KEY}&s=${str}${type !== 'all' ? `&type=${type}` : ''}`) //ищем фильмы по строке, которая подаётся в функцию из Search
+    fetch(`https://www.omdbapi.com/?apikey=${API_KEY}&s=${str}${type !== 'all' ? `&type=${type}` : ''}`) //ищем фильмы по строке, которая подаётся в функцию из Search
     .then(response => response.json()) 
     .then(result => this.setState({movies: result.Search, loading: false}))
+    .catch((err) => {
+      console.error(err);
+      this.setState({loading: false})
+    })
   }
 
 
