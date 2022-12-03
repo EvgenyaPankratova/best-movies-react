@@ -1,24 +1,16 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { Footer } from "./layout/Footer";
+import { Header } from "./layout/Header";
+import { Main } from "./layout/Main";
 
-function App() {
+
+function App() { //использовать div в качестве корневого элемента не обязательно, используем пустой тег
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <> 
+     <Header/> 
+     <Main/>
+     <Footer/>
+    </>
   );
 }
 
