@@ -1,25 +1,24 @@
-import React from "react";
+import React, {useState} from "react";
 
-class Search extends React.Component {
-  state = {
-    search: "",
-    type: 'all'
-  };
+const Search = (props) =>  {
+  const {
+    searchMovies = Function.prototype, //делаем дестр. присв. из пропсов + устанавливаем значение по умолчанию для searchMovies: это некая функция (чтобы в случае если функция не передана, код не ломался)
+  } = props;
 
-  handleKey = (event) => {
+  const [search, setSearch] = useState('');
+  const [type, setType] = useState('all');
+
+  const handleKey = (event) => {
     if (event.key === "Enter") {
-      this.props.searchMovies(this.state.search); //обрабатываем нажатие Enter. получаем функцию из Main
+      searchMovies(search, type); //обрабатываем нажатие Enter. получаем функцию из Main
     }
   };
 
-  handleFilter = (event) => { 
-     this.setState(() => ({type: event.target.dataset.type}), () => { //считываем  с помощью dataset значение атрибута data(у нас type), и передаём в state type 
-      this.props.searchMovies(this.state.search, this.state.type) //вызываем функцию из Main тогда, когда зна-е type обновлено
-     }) 
+  const handleFilter = (event) => { 
+      setType(event.target.dataset.type); //считываем  с помощью dataset значение атрибута data(у нас type), и передаём в state type 
+      searchMovies(search, event.target.dataset.type);  //вызываем функцию из Main тогда, когда зна-е type обновлено
+     };
    
-  }
-
-  render() {
     return (
       <div>
         <div className="row">
@@ -29,15 +28,15 @@ class Search extends React.Component {
               placeholder="Search movie"
               type="search"
               className="validate"
-              value={this.state.search}
+              value={search}
               onChange={(event) =>
-                this.setState({ search: event.target.value })
+                setSearch(event.target.value)
               } //записываем в состояние search то, что вводит пользователь
-              onKeyDown={this.handleKey}
+              onKeyDown={handleKey}
             />
             <button
               className="search-btn btn teal darken-4"
-              onClick={() => this.props.searchMovies(this.state.search, this.state.type)}
+              onClick={() => searchMovies(search, type)}
             >
               Search
             </button>
@@ -48,8 +47,8 @@ class Search extends React.Component {
             <label>
               <input name="type" type="radio"  
               data-type="all"  /*добавляем дата-атрибут, каждому инпуту свой */
-              onChange={this.handleFilter}
-              checked={this.state.type === 'all'}
+              onChange={handleFilter}
+              checked={type === 'all'}
               />  
               <span>All</span>
             </label>
@@ -58,8 +57,8 @@ class Search extends React.Component {
               <input name="type" 
               type="radio" 
               data-type="movie" 
-              onChange={this.handleFilter}
-              checked={this.state.type === 'movie'}
+              onChange={handleFilter}
+              checked={type === 'movie'}
               />
               <span>Movies only</span>
             </label>
@@ -68,8 +67,8 @@ class Search extends React.Component {
               <input name="type" 
               type="radio"  
               data-type="series" 
-              onChange={this.handleFilter}
-              checked={this.state.type === 'series'}
+              onChange={handleFilter}
+              checked={type === 'series'}
               />
               <span >Series only</span>
             </label>
@@ -77,7 +76,6 @@ class Search extends React.Component {
         </div>
       </div>
     );
-  }
 }
 
 export { Search };

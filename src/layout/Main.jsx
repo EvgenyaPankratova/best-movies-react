@@ -1,56 +1,51 @@
 import { MoviesList } from "../components/MoviesList";
 import {Preloader} from "../components/Preloader";
 import {Search} from "../components/Search";
-import React from "react";
+import React, {useState, useEffect} from "react";
 
 const API_KEY = process.env.REACT_APP_API_KEY; // достаём из env.local наш ключ API
 
-class Main extends React.Component {
-      state = {
-        movies: [],
-        loading: true
-    }
+function Main () {
 
-    
+  const [movies, setMovies] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  
 
 
-  componentDidMount(){ //делаем запрос данных в методе жизненного цикла
-    fetch(`https://www.omdbapi.com/?apikey=${API_KEY}&s=Shrek`) //получаем данные из API, прилож. Postman
-    .then(response => response.json()) //преобразуем ответ в JSON-объект
-    .then(result => this.setState({movies: result.Search, loading: false})) //обрабатываем ответ: внутрь массива movies "кладём" то, что находится в ключе Searct (см. в Postman)
-    .catch((err) => {
-      console.error(err);
-      this.setState({loading: false})
-    })
-  }
 
-  searchMovies = (str, type = 'all') => {
-    this.setState({loading: true})
+  const searchMovies = (str, type = 'all') => {
+    setLoading(true)
     fetch(`https://www.omdbapi.com/?apikey=${API_KEY}&s=${str}${type !== 'all' ? `&type=${type}` : ''}`) //ищем фильмы по строке, которая подаётся в функцию из Search
     .then(response => response.json()) 
-    .then(result => this.setState({movies: result.Search, loading: false}))
+    .then((result) => {setLoading(false); setMovies(result.Search)})
     .catch((err) => {
       console.error(err);
-      this.setState({loading: false})
+      setLoading(false);
     })
   }
 
-
-
-  render() {
-    const {movies, loading} = this.state;
+  useEffect( () => {
+    fetch(`https://www.omdbapi.com/?apikey=${API_KEY}&s=Shrek`) //получаем данные из API, прилож. Postman
+    .then(response => response.json()) //преобразуем ответ в JSON-объект
+    .then((result) => {setLoading(false); setMovies(result.Search)}) //обрабатываем ответ: внутрь массива movies "кладём" то, что находится в ключе Searct (см. в Postman)
+    .catch((err) => {
+      console.error(err);
+      setLoading(false)
+    })
+  }, [])
 
     return (
       <main className="container content">
 
-        <Search searchMovies={this.searchMovies}/>
+        <Search searchMovies={searchMovies}/>
         { loading ? <Preloader /> : (<MoviesList movies={movies}/>)} {/*если загрузка false, передаём массив movies в MoviesList */}
         
 
 
       </main>
     );
-   }
+   
 }
 
 export { Main };
